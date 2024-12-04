@@ -1,19 +1,8 @@
 name: Daily Test Run
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-    - main
-    
-  pull_request:
-    branches:
-    - main
-
   schedule:
-  - cron: "0 14 * * 1-5"
-
-  workflow_dispatch:
+    - cron: "0 14 * * *"
 
 jobs:
   build:
