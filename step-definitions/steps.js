@@ -1,27 +1,23 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework');
-const { expect, $, browser } = require('@wdio/globals')
+const { expect, $ } = require('@wdio/globals')
 
-const HomePage = require('../pageobjects/home.page'); 
+const LoginPage = require('../pageobjects/login.page');
+const SecurePage = require('../pageobjects/secure.page');
 
 const pages = {
-    home: HomePage
+    login: LoginPage
 }
 
-Given(/^Im on the homepage$/, async () => {
-    await pages.home.open();
-    const isDisplayed = await pages.home.isHomePageDisplayed();
-    await expect(isDisplayed).toBe(true);
+Given(/^I am on the (\w+) page$/, async (page) => {
+    await pages[page].open()
 });
 
-When(/^When I click on blog$/, async () => {
-    await pages.home.clickBlog();
+When(/^I login with (\w+) and (.+)$/, async (username, password) => {
+    await LoginPage.login(username, password)
 });
 
-Then(/^Then I should see the blog page$/, async (message) => {
-    const isBlogDisplayed = await pages.home.isBlogPageDisplayed();
-    await expect(isBlogDisplayed).toBe(true);
-    await expect(browser).toHaveUrlContaining("https://moduscreate.com/insights/blog/");
+Then(/^I should see a flash message saying (.*)$/, async (message) => {
+    await expect(SecurePage.flashAlert).toBeExisting();
+    await expect(SecurePage.flashAlert).toHaveText(expect.stringContaining(message));
 });
- 
-
 
